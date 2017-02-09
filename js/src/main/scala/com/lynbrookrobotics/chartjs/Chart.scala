@@ -11,5 +11,7 @@ class Chart(ctx: CanvasRenderingContext2D, setup: js.Dynamic) extends js.Object 
   val data: js.Dynamic = js.native
 
   def update(): Unit = js.native
+
+  def overlay(c: Chart): Unit = js.native
 }
 

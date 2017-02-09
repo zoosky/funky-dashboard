@@ -26,6 +26,10 @@ object Main extends App {
     else "message"
   }))
 
+  dashboard.datasetGroup("testMultipleList").addDataset(new TimeSeriesLists("randomers")(
+    List(math.random(),math.random())
+  ))
+
   dashboard.datasetGroup("testTable").addDataset(new TimeSeriesTable("randomers")(
     List.tabulate((math.random * 10).toInt)(i => (math.random.toString, math.random.toString))
   ))
@@ -35,7 +39,11 @@ object Main extends App {
       Some(math.random)
     }
   }))
-
+  dashboard.datasetGroup("TestSnapshot").addDataset(new TimeSnapshotNumeric("randomers") ({
+    if (math.random < 0.05) None else {
+      Some(math.random)
+    }
+  }))
   var currentJSON = """{ "hello": "hi" }"""
 
   dashboard.datasetGroup("JsonEditor").addDataset(new JsonEditor("jsonvalue") (
