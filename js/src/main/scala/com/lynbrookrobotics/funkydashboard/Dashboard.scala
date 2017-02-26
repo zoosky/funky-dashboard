@@ -66,8 +66,8 @@ object Dashboard {
       datastream.onmessage = (e: MessageEvent) => {
         val newValues = Json.parse(e.data.toString).as[TimedValue[Map[String, Map[String, String]]]]
 
-        val errorMessage = newValues.value.get("Errors").get("Errors")
-        if (errorMessage != null && !errorMessage.replaceAll("\"", "").isEmpty) Dynamic.global.displayError(errorMessage)
+        val errorMessage = newValues.value.get("Errors").get("Errors").replaceAll("\"", "")
+        if (!errorMessage.isEmpty) Dynamic.global.displayError(errorMessage)
 
         $.modState { state =>
           state.copy(
@@ -75,6 +75,20 @@ object Dashboard {
           )
         }.runNow()
       }
+
+      Dynamic.global.window.addEventListener("keydown", (e: KeyboardEvent) => {
+        val keyCode = e.keyCode
+        if (keyCode <= 57 && keyCode >= 48) {
+          var page = keyCode - 49
+          if (page == -1) page = 9
+
+          $.modState { state =>
+            state.copy(
+              activeGroupIndex = page
+            )
+          }.runNow()
+        }
+      }, true)
     }
 
     def render(props: Props, state: State) = {
@@ -112,7 +126,7 @@ object Dashboard {
           div(className := "mdl-grid")(
             if (activeGroupIndex < groups.size) {
               val group = groups(activeGroupIndex)
-              group.datasets.filter(p => !p.name.equals("errorstream")).map { d =>
+              group.datasets.map { d =>
                 DatasetCard(
                   d.name,
                   Dataset.extract(d, s => {
