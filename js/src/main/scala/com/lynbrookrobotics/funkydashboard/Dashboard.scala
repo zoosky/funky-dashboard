@@ -6,6 +6,7 @@ import org.scalajs.dom.ext.Ajax
 import com.payalabs.scalajs.react.mdl._
 import org.scalajs.dom._
 import play.api.libs.json.Json
+import scala.scalajs.js.Dynamic
 
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.collection.immutable.Queue
